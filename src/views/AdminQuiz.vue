@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <div class="container-md" v-show="!created">
+        <div class="container-md">
             <h3>Add quiz details here</h3>
             <div class="mb-3">
                 <label for="formGroupExampleInput" class="form-label">Quiz Title</label>
@@ -18,10 +18,10 @@
                 <input type="text" class="form-control" id="formGroupExampleInput3" v-model="quizCategory"
                     placeholder="Medium: eg. Add Difficulty level">
             </div>
-            <button id="createbtn" @click="show" class="btn btn-dark">Create Quiz </button>
+            <button id="createbtn" @click="createQuiz();show()" class="btn btn-dark">Create Quiz </button>
             
         </div>
-        <div class="container-md" v-show="created">
+        <div class="container-md">
             <h3>Add Questions</h3>
             <div class="mb-3">
                 <label for="questionText" class="form-label">Question :</label>
@@ -54,7 +54,9 @@
             </div>
             <div id="btns">
             <button @click="addToQuiz" class="btn btn-dark">Add Questions </button>
-            <button @click="createQuiz" class="btn btn-dark">Add Questions to Quiz </button>
+            <label for="formGroupExampleInput2" class="form-label">Quiz Id</label>
+            <input type="Number" placeholder="Enter id" v-model="quizId">
+            <button @click="AddQuestion" class="btn btn-dark">Add Questions to Quiz </button>
         </div>
         </div>
     </div>
@@ -72,6 +74,7 @@ export default {
             quizTitle: '',
             quizDescription: '',
             quizCategory: '',
+            quizId:'',
             customQuestion: {
                 questionText: '',
                 options: ['', '', '', ''],
@@ -81,7 +84,7 @@ export default {
     },
     computed: {
         quizDetails: function () {
-            return { questions: this.questions, title: this.quizTitle, description: this.quizDescription, category: this.quizCategory};
+            return { questions: this.questions, title: this.quizTitle, description: this.quizDescription, category: this.quizCategory , id: this.quizId};
         }
     },
     methods: {
@@ -91,6 +94,15 @@ export default {
         createQuiz: function () {
             try {
                 admin.createQuiz('/create', this.quizDetails).then((response) => {
+                    console.log(response.data);
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        AddQuestion: function () {
+            try {
+                admin.createQuiz('/add', this.quizDetails).then((response) => {
                     console.log(response.data);
                 })
             } catch (error) {
@@ -126,7 +138,7 @@ export default {
 <style scoped>
 #btns{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 #createbtn{
     margin-top: 20px;
